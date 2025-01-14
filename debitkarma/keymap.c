@@ -34,18 +34,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case 2:
             writePinHigh(B7);
-            writePinHigh(C6);
-            writePinHigh(C5);
             break;
         case 1:
             writePinHigh(B7);
-            writePinLow(C6);
-            writePinLow(C5);
             break;
         default:
             writePinLow(B7);
-            writePinLow(C6);
-            writePinLow(C5);
             break;
     }
     return state;
