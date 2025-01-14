@@ -55,7 +55,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case COPY:
         if (record->event.pressed) {
-            // SEND_STRING( SS_DOWN(X_LCTL) SS_DOWN(X_L_SFT) SS_TAP(X_LEFT) SS_UP(X_L_SFT) "V" SS_UP(X_LCTL) );
+            // SEND_STRING( SS_DOWN(X_LCTL) SS_DOWN(X_L_SFT) SS_TAP(X_LEFT) SS_UP(X_L_SFT) "C" SS_UP(X_LCTL) );
             SEND_STRING( SS_DOWN(X_LCTL) "C" SS_UP(X_LCTL) );
         } else {
             // when keycode is released
