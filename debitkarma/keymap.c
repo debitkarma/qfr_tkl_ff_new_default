@@ -30,8 +30,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                  KC_NO,KC_NO,KC_NO,                KC_SPC,                                 KC_RALT,KC_RGUI, LT(1,KC_APP),  KC_RCTL,   KC_LEFT, KC_DOWN, KC_RGHT  )
 };
 
+void keyboard_pre_init_user(void) {
+    setPinOutput(B7);  // initialize B7 for LED
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     //repurposing NumLock LED
+    /*
     switch (get_highest_layer(state)) {
         case 2:
             writePinHigh(B7);
@@ -42,6 +47,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         default:
             writePinLow(B7);
             break;
+    }
+    */
+
+    // indicator LEDs for this board are opposite
+    if(IS_LAYER_ON_STATE(state, 2)) {
+        writePinLow(B7);
+    } else if(IS_LAYER_ON_STATE(state, 1)) {
+        writePinLow(B7);
+    } else {
+        writePinHigh(B7);
     }
     return state;
 }
