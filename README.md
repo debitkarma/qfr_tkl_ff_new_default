@@ -27,3 +27,13 @@ On function layer:
 1. CapsLock when double tapped sets macro layer
 1. CapsLock single tap returns to our regular layer
 1. CapsLock key should blink on interval when in macro mode.
+
+## Notes
+
+* LED high is off, LED low is on for the indicator lights on this board
+* You need to remove the definition of the pins from `keyboard.json` to use them for other purposes; I should create a new keyboard entry for this purpose
+* Make sure you define the LED pins/initialize them before you try to use them
+* LED pins are:
+  * B7 for NumLock (WinLock key)
+  * C5 for CapsLock
+  * C6 for ScrollLock
