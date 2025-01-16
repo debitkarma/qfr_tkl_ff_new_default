@@ -1,9 +1,8 @@
 #include QMK_KEYBOARD_H
-//#include <process_magic.c>
 #include "keycode_config.c"
 
-// adding tracker for win lock state, initializes to OFF
-static uint8_t winlock_tracker; // = 0;
+// adding tracker for win lock state
+static uint8_t winlock_tracker;
 
 enum custom_keycodes {
     KUNDO = SAFE_RANGE,
@@ -46,27 +45,29 @@ void toggle_windows_lock(void) {
     if (winlock_tracker) {
         winlock_tracker++;
         keymap_config.no_gui = false;
-        //process_magic(QK_MAGIC_GUI_ON); idk how this works
-        //SS_TAP( X_QK_MAGIC_GUI_ON ); doesn't work
-        writePinLow(B7);
+        writePinHigh(B7);
     } else {
         winlock_tracker--;
         keymap_config.no_gui = true;
-        //process_magic(QK_MAGIC_GUI_OFF); idk how this works
-        //SS_TAP( X_QK_MAGIC_GUI_OFF ); doesn't work
-        writePinHigh(B7);
+        writePinLow(B7);
     }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-
+    
     // indicator LEDs for this board are opposite
-    if(IS_LAYER_ON_STATE(state, 2)) {
-        writePinLow(C6);
-    } else if(IS_LAYER_ON_STATE(state, 1)) {
+
+    // scroll lock led when FN is held
+    if(IS_LAYER_ON_STATE(state, 1)) {
         writePinLow(C6);
     } else {
         writePinHigh(C6);
+    }
+    // caps lock led for layer 2 status
+    if(IS_LAYER_ON_STATE(state, 2)) {
+        writePinLow(C5);
+    } else {
+        writePinHigh(C5);
     }
     return state;
 }
@@ -101,5 +102,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 };
 
-// SEND_STRING( SS_DOWN(X_LCTL) SS_DOWN(X_L_SFT) SS_TAP(X_LEFT) SS_UP(X_L_SFT) "C" SS_UP(X_LCTL) );
-// SEND_STRING( SS_DOWN(X_LCTL) SS_DOWN(X_L_SFT) SS_TAP(X_RIGHT) SS_UP(X_L_SFT) "V" SS_UP(X_LCTL) );
+//
