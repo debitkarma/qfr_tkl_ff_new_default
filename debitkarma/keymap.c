@@ -4,6 +4,7 @@
 // adding tracker for win lock state
 static uint8_t winlock_tracker;
 static uint8_t f22_tracker;
+static uint16_t blink_timer = 0;
 
 enum custom_keycodes {
     KUNDO = SAFE_RANGE,
@@ -53,6 +54,26 @@ void toggle_windows_lock(void) {
         winlock_tracker--;
         keymap_config.no_gui = false;
         writePinHigh(B7);
+    }
+}
+
+// How to make this repeat - would while be appropriate,
+// or do we just check on every matrix scan?
+void start_blink(static pin) {
+    blink_timer = timer_read();
+    bool led_on = true;
+    if ( timer_elapsed(blink_timer) < 300 ) {
+        switch (led_on) {
+        case true:
+            writePinLow(pin);
+            break;
+        default:
+            writePinHigh(pin);
+            break;
+        }
+    } else {
+        led_on = !led_on;
+        blink_timer = timer_read();
     }
 }
 
