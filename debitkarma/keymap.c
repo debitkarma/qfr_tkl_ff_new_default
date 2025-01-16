@@ -31,24 +31,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_pre_init_user(void) {
-    setPinOutput(B7);  // initialize B7 for LED
+    setPinOutput(B7);  // initialize B7 for WinLock (numlock) LED
+    setPinOutput(C5);  // initialize C5 for CapsLock LED
+    setPinOutput(C6);  // initialize C6 for ScrollLock LED
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    //repurposing NumLock LED
-    /*
-    switch (get_highest_layer(state)) {
-        case 2:
-            writePinHigh(B7);
-            break;
-        case 1:
-            writePinHigh(B7);
-            break;
-        default:
-            writePinLow(B7);
-            break;
-    }
-    */
 
     // indicator LEDs for this board are opposite
     if(IS_LAYER_ON_STATE(state, 2)) {
