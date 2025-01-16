@@ -3,6 +3,7 @@
 
 // adding tracker for win lock state
 static uint8_t winlock_tracker;
+static uint8_t f22_tracker;
 
 enum custom_keycodes {
     KUNDO = SAFE_RANGE,
@@ -99,8 +100,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             toggle_windows_lock();
         }
+        break;
+    case KC_A ... KC_F21: //notice how it skips over F22
+    case KC_F23 ... KC_EXSEL: //exsel is the last one before the modifier keys
+        if (IS_LAYER_ON(2)) {
+            if (record->event.pressed) {
+                register_code(KC_F22); //this means to send F22 down
+                f22_tracker++;
+                register_code(keycode);
+                return false;
+            }
+        }
     }
+
     return true;
 };
 
-//
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case KC_A ... KC_F21: //notice how it skips over F22
+    case KC_F23 ... KC_EXSL: //exsel is the last one before the modifier keys
+        if (IS_LAYER_ON(2)) {
+            if (!record->event.pressed) {
+                f22_tracker--;
+                if (!f22_tracker) {
+                    unregister_code(KC_F22); //this means to send F22 up
+                }
+            }
+        }
+        break;
+    }
+};
