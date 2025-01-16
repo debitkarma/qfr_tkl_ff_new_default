@@ -1,4 +1,6 @@
 #include QMK_KEYBOARD_H
+//#include <process_magic.c>
+#include "keycode_config.c"
 
 // adding tracker for win lock state, initializes to OFF
 static uint8_t winlock_tracker; // = 0;
@@ -43,11 +45,15 @@ void keyboard_pre_init_user(void) {
 void toggle_windows_lock(void) {
     if (winlock_tracker) {
         winlock_tracker++;
-        SS_TAP( QK_MAGIC_GUI_ON );
+        keymap_config.no_gui = false;
+        //process_magic(QK_MAGIC_GUI_ON); idk how this works
+        //SS_TAP( X_QK_MAGIC_GUI_ON ); doesn't work
         writePinLow(B7);
     } else {
         winlock_tracker--;
-        SS_TAP( QK_MAGIC_GUI_OFF );
+        keymap_config.no_gui = true;
+        //process_magic(QK_MAGIC_GUI_OFF); idk how this works
+        //SS_TAP( X_QK_MAGIC_GUI_OFF ); doesn't work
         writePinHigh(B7);
     }
 }
@@ -82,7 +88,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case KPASTE:
         if (record->event.pressed) {
-            SEND_STRING( SS_LCTL(X_V) );
+            SEND_STRING( SS_LCTL(SS_TAP(X_V)) );
         } else {
             // when keycode is released
         }
