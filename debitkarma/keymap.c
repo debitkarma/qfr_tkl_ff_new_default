@@ -37,19 +37,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void keyboard_pre_init_user(void) {
     setPinOutput(B7);  // initialize B7 for WinLock (numlock) LED
+    writePinHigh(B7);  // starts with it off
     setPinOutput(C5);  // initialize C5 for CapsLock LED
     setPinOutput(C6);  // initialize C6 for ScrollLock LED
 }
 
 void toggle_windows_lock(void) {
-    if (winlock_tracker) {
+    if (!winlock_tracker) {
         winlock_tracker++;
-        keymap_config.no_gui = false;
-        writePinHigh(B7);
-    } else {
-        winlock_tracker--;
         keymap_config.no_gui = true;
         writePinLow(B7);
+    } else {
+        winlock_tracker--;
+        keymap_config.no_gui = false;
+        writePinHigh(B7);
     }
 }
 
