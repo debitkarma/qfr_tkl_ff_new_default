@@ -1,0 +1,15 @@
+{
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": true,
+        "extrakey": true,
+        "mousekey": true,
+        "nkro": true
+    },
+    "indicators": {
+        "caps_lock": "C5",
+        "scroll_lock": "C6",
+        "on_state": 0
+    }
+}
